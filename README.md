@@ -1,2 +1,2 @@
-# StatArb Basic
- Implementation of the PCA factor approach of Avellaneda et. al.
+# StatArb-Basic
+ Basic implementation of a version of the paper by Avellaneda
