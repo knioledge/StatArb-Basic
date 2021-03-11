@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Feb 28 20:53:12 2021
-
-@author: Yogesh
+Utility functions used in the main scripts
 """
 
 import numpy as np
@@ -16,7 +14,7 @@ from sklearn.linear_model import LinearRegression
 from statsmodels.tsa.arima.model import ARIMA
 
 
-
+# gets the residuals
 def get_Residuals(pReturns,pFactorReturns):
     #storing the residuals
     lResiduals = pd.DataFrame(columns = pReturns.columns, index = pReturns.index)
@@ -29,7 +27,7 @@ def get_Residuals(pReturns,pFactorReturns):
     return lResiduals,lCoef
 
 
-
+# calculates the s score
 
 def get_sScore(pResiduals, kappa=252/30):
     lCumulativeResiduals = pd.DataFrame(pResiduals.cumsum())
@@ -55,6 +53,7 @@ def get_sScore(pResiduals, kappa=252/30):
     s_score = (Xt-m)/sigma_eq
     return s_score
 
+# Constructs stock baskets with long and short weights
 
 def get_Baskets(sScores,  sbo=1, sso=1, sbc=0.25, ssc=0.25):
     
@@ -76,6 +75,8 @@ def get_Baskets(sScores,  sbo=1, sso=1, sbc=0.25, ssc=0.25):
     lWeights = WeightsL.append(WeightsS)
     return(lWeights)
         
+# calculates portfolio return
+# a lot of functionality is to be built. Some parameters are unused currently
 def get_PortfolioReturn(pWeights, pDailyReturns, pRebalancingFrequency, pTxnCost=0):
     
     lRelevantTickers = [c for c in pDailyReturns.index if c in pWeights.index]
