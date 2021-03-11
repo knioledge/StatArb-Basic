@@ -1,8 +1,19 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Mar  1 16:15:32 2021
+Main script for running the backtest
+THe current implementation is a very tedious loop based implementation that takes a few hours to run 
+on a daily frequency for 5 years of data
+There are a number of suboptimal project parameters used in this early stage stat arb setup.
 
-@author: Yogesh
+- Currently the input data is via Yahoo finance adjusted closing prices. Which is obviously very sub optimal
+Next stage of the project will be via a more reliable price history
+- The implementation is via an equal weighted portfolio rebalanced daily at previous day's closing prices. An actual 
+stat arb portfolio will be optimized, and rebalanced through the day. For backtests a Vwap based daily price is a far
+better way to backtest, although even that is with its own limitations
+- The elephant in the room is obviously txn cost modeling whcih needs to be incorporated into the expected return vector
+- Needless to say, even with the very magnanimous assumptions, the performance is completely lacklustre for the backtest
+- Nevertheless this is a backbone on which future projects can be built on
+ 
 """
 
 import numpy as np
@@ -19,14 +30,16 @@ import Utilities_1
 from Utilities_1 import *
 import warnings
 
+# load the data from local directory
 tRawData = pickle.load(open("t_data_2.pkl", "rb"))
 
 tRawData.head()
 
 tRawData_close = tRawData.pivot(columns='Ticker', values='Close')
+# calculate returns
 tRawData_returns = tRawData_close.pct_change(1)
 tRawData_returns.fillna(0, inplace=True)
-
+# tRawData_returns has a few outliers which were manually cleaned
 
 # Generate windowed tables
 window = 120
